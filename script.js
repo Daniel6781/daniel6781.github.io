@@ -1,12 +1,21 @@
 console.log("Hola Mundo");
 
 let intentos = 6;
-let diccionario = ['APPLE', 'HURLS', 'WINGS', 'YOUTH'];
-let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+let palabra;
 
 window.addEventListener('load', init);
 
-function init() {
+async function obtenerPalabraAleatoria() {
+  const respuesta = await fetch('https://random-word-api.herokuapp.com/word?lang=es&length=5');
+  const json = await respuesta.json();
+  return json[0].toUpperCase();
+}
+
+async function init() {
+  // Cambia esta línea para obtener la palabra de la API de WordsAPI
+  palabra = await obtenerPalabraAleatoria();
+  console.log('Palabra obtenida:', palabra);
+
   const button = document.getElementById("guess-button");
   button.addEventListener("click", intentar);
 }
@@ -21,7 +30,7 @@ function intentar() {
   const INTENTO = leerIntento();
 
   if (INTENTO === palabra) {
-    terminar("<h1>¡GANASTE APENAMI! 😀</h1>");
+    terminar("<h1>¡GANASTE! 😀</h1>");
     return;
   }
 
